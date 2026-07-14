@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{% if criterion %}Редактировать{% else %}Добавить{% endif %} критерий{% endblock %}
+{% block content %}
+<h2>{% if criterion %}Редактировать{% else %}Добавить{% endif %} критерий</h2>
+<form method="post" action="{% if criterion %}/admin/criteria/{{ criterion.id }}/edit{% else %}/admin/criteria/add{% endif %}">
+  <div class="mb-3">
+    <label for="name" class="form-label">Название *</label>
+    <input type="text" class="form-control" id="name" name="name" value="{{ criterion.name if criterion else '' }}" required>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Описание</label>
+    <textarea class="form-control" id="description" name="description" rows="3">{{ criterion.description if criterion else '' }}</textarea>
+  </div>
+  <div class="mb-3">
+    <label for="max_score" class="form-label">Максимальный балл *</label>
+    <input type="number" step="0.1" class="form-control" id="max_score" name="max_score" value="{{ criterion.max_score if criterion else '5' }}" required>
+  </div>
+  <div class="mb-3">
+    <label for="weight" class="form-label">Вес (0-10) *</label>
+    <input type="number" step="0.1" class="form-control" id="weight" name="weight" value="{{ criterion.weight if criterion else '1.0' }}" required>
+  </div>
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="active" name="active" {% if not criterion or criterion.active %}checked{% endif %}>
+    <label class="form-check-label" for="active">Активен</label>
+  </div>
+  <button type="submit" class="btn btn-success">Сохранить</button>
+  <a href="/admin/criteria" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}

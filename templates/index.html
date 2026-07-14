@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Главная — Инновационная витрина{% endblock %}
+{% block content %}
+<div class="jumbotron p-5 bg-light rounded">
+    <h1 class="display-4">Цифровая витрина инноваций</h1>
+    <p class="lead">Объединяем стартапы, предприятия и экспертов для эффективного сотрудничества.</p>
+    <hr class="my-4">
+    <p>Подайте заявку, найдите проект или предложите свою экспертизу.</p>
+    {% if not user %}
+    <a class="btn btn-primary btn-lg" href="/register" role="button">Присоединиться</a>
+    {% endif %}
+</div>
+{% endblock %}

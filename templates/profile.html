@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Ваш профиль</h2>
+
+    {% if success_message %}
+      <div class="alert alert-info">{{ success_message }}</div>
+    {% endif %}
+
+    <form method="post" action="/profile/edit">
+      <div class="mb-3">
+        <label for="name" class="form-label">Имя</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}">
+      </div>
+      <hr>
+      {% if startup_profile %}
+      <h4>Профиль стартапа</h4>
+      <div class="mb-3">
+        <label for="team_name" class="form-label">Название команды</label>
+        <input type="text" class="form-control" id="team_name" name="team_name" value="{{ startup_profile.team_name or '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Описание</label>
+        <textarea class="form-control" id="description" name="description" rows="3">{{ startup_profile.description or '' }}</textarea>
+      </div>
+      <div class="mb-3">
+        <label for="website" class="form-label">Веб-сайт</label>
+        <input type="text" class="form-control" id="website_enterprise" name="website" value="{{ enterprise_profile.website or '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="founded_year" class="form-label">Год основания</label>
+        <input type="number" class="form-control" id="founded_year" name="founded_year" value="{{ startup_profile.founded_year or '' }}">
+      </div>
+      {% endif %}
+      {% if enterprise_profile %}
+      <h4>Профиль предприятия</h4>
+      <div class="mb-3">
+        <label for="company_name" class="form-label">Название компании</label>
+        <input type="text" class="form-control" id="company_name" name="company_name" value="{{ enterprise_profile.company_name or '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="industry" class="form-label">Отрасль</label>
+        <input type="text" class="form-control" id="industry" name="industry" value="{{ enterprise_profile.industry or '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="description_enterprise" class="form-label">Описание</label>
+        <textarea class="form-control" id="description_enterprise" name="description" rows="3">{{ enterprise_profile.description or '' }}</textarea>
+      </div>
+      <div class="mb-3">
+        <label for="website_enterprise" class="form-label">Веб-сайт</label>
+        <<input type="text" class="form-control" id="website" name="website" value="{{ startup_profile.website or '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="competencies" class="form-label">Ключевые компетенции (через запятую)</label>
+        <input type="text" class="form-control" id="competencies" name="competencies" 
+               value="{{ enterprise_profile.competencies | join(', ') if enterprise_profile.competencies else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="experience_years" class="form-label">Опыт работы в отрасли (лет)</label>
+        <input type="number" class="form-control" id="experience_years" name="experience_years" 
+               value="{{ enterprise_profile.experience_years if enterprise_profile.experience_years else '' }}">
+      </div>
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="is_available" name="is_available" 
+               {% if enterprise_profile.is_available %}checked{% endif %}>
+        <label class="form-check-label" for="is_available">Готово получать проекты на рецензирование</label>
+      </div>
+      {% endif %}
+      <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+
+    <hr>
+    <h4>Сменить пароль</h4>
+    <form method="post" action="/profile/change-password">
+      <div class="mb-3">
+        <label for="current_password" class="form-label">Текущий пароль</label>
+        <input type="password" class="form-control" id="current_password" name="current_password" required>
+      </div>
+      <div class="mb-3">
+        <label for="new_password" class="form-label">Новый пароль</label>
+        <input type="password" class="form-control" id="new_password" name="new_password" minlength="6" required>
+      </div>
+      <button type="submit" class="btn btn-warning">Сменить пароль</button>
+    </form>
+
+    <h4 class="mt-4">Сменить email</h4>
+    <form method="post" action="/profile/change-email">
+      <div class="mb-3">
+        <label for="new_email" class="form-label">Новый email</label>
+        <input type="email" class="form-control" id="new_email" name="new_email" required>
+        <small class="text-muted">На новый адрес будет отправлено письмо с подтверждением.</small>
+      </div>
+      <button type="submit" class="btn btn-info">Сменить email</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

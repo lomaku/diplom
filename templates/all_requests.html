@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Витрина заявок{% endblock %}
+{% block content %}
+<h2>Витрина заявок</h2>
+<form class="row g-3 mb-4" method="get" action="/requests">
+  <div class="col-md-4">
+    <input type="text" class="form-control" name="search" placeholder="Поиск по названию/описанию" value="{{ search }}">
+  </div>
+  <div class="col-md-4">
+    <input type="text" class="form-control" name="tag" placeholder="Фильтр по тегу" value="{{ current_tag }}">
+  </div>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-primary me-2">Искать</button>
+    <a href="/requests" class="btn btn-secondary">Сбросить</a>
+  </div>
+</form>
+
+{% if requests %}
+  <div class="row">
+    {% for req in requests %}
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="/requests/{{ req.id }}" class="text-decoration-none">{{ req.title }}</a>
+          </h5>
+          <p class="card-text">{{ req.description[:150] }}{% if req.description|length > 150 %}...{% endif %}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Теги:</strong> {{ req.tags | join(', ') if req.tags else 'нет' }}</li>
+            <li class="list-group-item"><strong>Статус:</strong> <span class="badge bg-success">{{ req.status.value | status_rus }}</span></li>
+            <li class="list-group-item"><strong>Предприятие:</strong> <a href="/user/{{ req.enterprise.id }}">{{ req.enterprise.name }}</a></li>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">Создана {{ req.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Нет открытых заявок.</p>
+{% endif %}
+{% endblock %}

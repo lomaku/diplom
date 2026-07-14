@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ req.title }}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h2>{{ req.title }}</h2>
+    <p class="text-muted">Предприятие: <a href="/user/{{ req.enterprise.id }}">{{ req.enterprise.name }}</a></p>
+    <hr>
+    <h5>Описание потребности</h5>
+    <p>{{ req.description }}</p>
+    <h5>Требования к решению</h5>
+    <p>{{ req.requirements }}</p>
+    <h5>Теги</h5>
+    <p>{{ req.tags | join(', ') if req.tags else 'не указаны' }}</p>
+    <h5>Статус</h5>
+    <span class="badge bg-success">{{ req.status.value | status_rus }}</span>
+
+    {% if is_owner %}
+    <hr>
+    <h5>Отклики</h5>
+    {% if req.responses %}
+      <ul class="list-group">
+      {% for resp in req.responses %}
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between">
+            <strong>{{ resp.from_user.name }}</strong>
+            <small class="text-muted">{{ resp.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+          </div>
+          <p class="mt-2">{{ resp.message }}</p>
+        </li>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-muted">Пока нет откликов.</p>
+    {% endif %}
+    {% endif %}
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Откликнуться</h5>
+        {% if user %}
+        <form method="post" action="/requests/{{ req.id }}/respond">
+          <div class="mb-3">
+            <label for="message" class="form-label">Ваше сообщение</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Отправить отклик</button>
+        </form>
+        {% else %}
+        <p class="text-muted">Войдите, чтобы откликнуться.</p>
+        <a href="/login" class="btn btn-outline-primary">Войти</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

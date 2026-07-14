@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+  <h2>Результаты оценки проекта «{{ project_title }}»</h2>
+  <p>Итоговая взвешенная оценка: <strong>{{ overall_score }}</strong>.</p>
+  {% if comments %}
+  <h3>Комментарии экспертов:</h3>
+  <ul>
+    {% for c in comments %}
+    <li><em>{{ c.expert_name }}:</em> {{ c.comment }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <p>С уважением, Акселератор.</p>
+</body>
+</html>

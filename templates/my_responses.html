@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Отклики по моим заявкам{% endblock %}
+{% block content %}
+<h2>Отклики по моим заявкам</h2>
+{% if responses %}
+  <div class="list-group">
+  {% for resp in responses %}
+    <div class="list-group-item {% if not resp.is_read %}list-group-item-warning fw-bold{% endif %}">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <strong><a href="/user/{{ resp.from_user.id }}">{{ resp.from_user.name }}</a></strong> — 
+          <a href="/requests/{{ resp.request.id }}">{{ resp.request.title }}</a>
+          {% if not resp.is_read %}
+            <span class="badge bg-danger ms-2">Новое</span>
+          {% endif %}
+        </div>
+        <div>
+          <small class="text-muted">{{ resp.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+          {% if not resp.is_read %}
+          <form method="post" action="/requests/my/responses/{{ resp.id }}/mark-read" style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-outline-success ms-2">Прочитано</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+      <p class="mt-2 mb-0">{{ resp.message }}</p>
+    </div>
+  {% endfor %}
+  </div>
+{% else %}
+  <p class="text-muted">Нет откликов.</p>
+{% endif %}
+{% endblock %}

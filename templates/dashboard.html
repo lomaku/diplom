@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+<div class="jumbotron p-5 bg-light rounded">
+  <h1 class="display-4">Добро пожаловать, {{ user.name }}!</h1>
+  <p class="lead">Вы вошли как:
+    {% for role in user.roles %}{{ role.role.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+  </p>
+  <hr class="my-4">
+  <div class="row">
+    {% for role in user.roles %}
+      {% if role.role.name == 'startup' %}
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">🚀 Мой стартап</h5>
+              <p class="card-text">Управляйте проектами, создавайте новые.</p>
+              <a href="/projects/create" class="btn btn-primary">Создать проект</a>
+              <a href="/projects/my" class="btn btn-outline-secondary">Мои проекты</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {% if role.role.name == 'enterprise' %}
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">🏢 Предприятие</h5>
+              <p class="card-text">Подайте заявку на инновации.</p>
+              <a href="/requests/create" class="btn btn-primary">Создать заявку</a>
+              <a href="/requests/my" class="btn btn-outline-secondary">Мои заявки</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {% if role.role.name == 'admin' %}
+        <div class="col-md-6 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">⚙️ Администратор</h5>
+              <p class="card-text">Управляйте системой.</p>
+              <a href="/admin/users" class="btn btn-primary">Пользователи</a>
+              <a href="/admin/criteria" class="btn btn-outline-secondary">Критерии</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

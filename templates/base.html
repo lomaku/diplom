@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Инновационная витрина{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Инновационная витрина</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/projects">Проекты</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/requests">Заявки</a></li>
+                    {% if user %}
+                        {% for role in user.roles %}
+                            {% if role.role.name == 'startup' %}
+                                <li class="nav-item"><a class="nav-link" href="/projects/my">Мои проекты</a></li>
+                                <li class="nav-item"><a class="nav-link" href="/projects/create">Создать проект</a></li>
+                            {% elif role.role.name == 'enterprise' %}
+                            <li class="nav-item"><a class="nav-link" href="/requests/my">Мои заявки</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/requests/create">Создать заявку</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/requests/my/responses">
+                                    Отклики
+                                    {% if user.unread_count %}
+                                    <span class="badge bg-danger">{{ user.unread_count }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                            {% elif role.role.name == 'admin' %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Админка</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="/admin/users">Пользователи</a></li>
+                                        <li><a class="dropdown-item" href="/admin/criteria">Критерии</a></li>
+                                        <li><a class="dropdown-item" href="/admin/assign-experts">Эксперты</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav">
+                    {% if user %}
+                        <li class="nav-item"><span class="nav-link">👤 {{ user.name }}</span></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Профиль</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/logout">Выйти</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="/login">Войти</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/register">Регистрация</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="container mt-4">
+        {% block content %}{% endblock %}
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

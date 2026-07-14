@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Создать проект{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Создать новый проект</h2>
+    <form method="post" action="/projects/create" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="title" class="form-label">Название *</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Описание</label>
+        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="stage" class="form-label">Стадия разработки</label>
+        <input type="text" class="form-control" id="stage" name="stage" placeholder="Например: прототип, MVP, серийный продукт">
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Теги (через запятую)</label>
+        <input type="text" class="form-control" id="tags" name="tags" placeholder="например: AI, медицина, блокчейн">
+        <small class="text-muted">Помогут предприятиям найти ваш проект по компетенциям.</small>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Изображение проекта</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+      </div>
+      <button type="submit" class="btn btn-primary">Создать проект</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

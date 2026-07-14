@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Управление критериями{% endblock %}
+{% block content %}
+<h2>Критерии оценки</h2>
+<a href="/admin/criteria/add" class="btn btn-primary mb-3">Добавить критерий</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Название</th>
+      <th>Описание</th>
+      <th>Макс. балл</th>
+      <th>Вес</th>
+      <th>Активен</th>
+      <th>Действия</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in criteria %}
+    <tr>
+      <td>{{ c.id }}</td>
+      <td>{{ c.name }}</td>
+      <td>{{ c.description }}</td>
+      <td>{{ c.max_score }}</td>
+      <td>{{ c.weight }}</td>
+      <td>{{ "Да" if c.active else "Нет" }}</td>
+      <td>
+        <a href="/admin/criteria/{{ c.id }}/edit" class="btn btn-sm btn-outline-secondary">Изменить</a>
+        <form method="post" action="/admin/criteria/{{ c.id }}/toggle-active" style="display:inline;">
+          <button type="submit" class="btn btn-sm btn-{% if c.active %}warning{% else %}success{% endif %}">
+            {% if c.active %}Отключить{% else %}Включить{% endif %}
+          </button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

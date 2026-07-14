@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Редактировать заявку{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Редактирование заявки</h2>
+    <form method="post">
+      <div class="mb-3">
+        <label for="title" class="form-label">Название *</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ req.title }}" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Описание потребности</label>
+        <textarea class="form-control" id="description" name="description" rows="4">{{ req.description or '' }}</textarea>
+      </div>
+      <div class="mb-3">
+        <label for="requirements" class="form-label">Требования</label>
+        <textarea class="form-control" id="requirements" name="requirements" rows="4">{{ req.requirements or '' }}</textarea>
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Теги (через запятую)</label>
+        <input type="text" class="form-control" id="tags" name="tags" value="{{ req.tags | join(', ') if req.tags else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="status" class="form-label">Статус</label>
+        <select class="form-select" id="status" name="status">
+          <option value="open" {% if req.status.value == 'open' %}selected{% endif %}>Открыта</option>
+          <option value="in_progress" {% if req.status.value == 'in_progress' %}selected{% endif %}>В работе</option>
+          <option value="closed" {% if req.status.value == 'closed' %}selected{% endif %}>Закрыта</option>
+          <option value="archived" {% if req.status.value == 'archived' %}selected{% endif %}>В архиве</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Сохранить</button>
+      <a href="/requests/my" class="btn btn-secondary">Отмена</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

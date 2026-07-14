@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.name }} — профиль{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row mb-4">
+    <div class="col">
+      <h1>{{ profile_user.name }}</h1>
+      <p class="text-muted">
+        {% if profile_user.startup_profile %}🚀 Стартап{% endif %}
+        {% if profile_user.enterprise_profile %}🏢 Предприятие{% endif %}
+      </p>
+    </div>
+  </div>
+
+  {% if profile_user.startup_profile %}
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4>О стартапе</h4>
+      <p><strong>Название команды:</strong> {{ profile_user.startup_profile.team_name }}</p>
+      {% if profile_user.startup_profile.description %}
+      <p><strong>Описание:</strong> {{ profile_user.startup_profile.description }}</p>
+      {% endif %}
+      {% if profile_user.startup_profile.website %}
+      <p><strong>Сайт:</strong> <a href="{{ profile_user.startup_profile.website }}" target="_blank">{{ profile_user.startup_profile.website }}</a></p>
+      {% endif %}
+      {% if profile_user.startup_profile.founded_year %}
+      <p><strong>Год основания:</strong> {{ profile_user.startup_profile.founded_year }}</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if profile_user.enterprise_profile %}
+  <div class="card mb-4">
+    <div class="card-body">
+      <h4>О предприятии</h4>
+      <p><strong>Компания:</strong> {{ profile_user.enterprise_profile.company_name }}</p>
+      {% if profile_user.enterprise_profile.industry %}
+      <p><strong>Отрасль:</strong> {{ profile_user.enterprise_profile.industry }}</p>
+      {% endif %}
+      {% if profile_user.enterprise_profile.description %}
+      <p><strong>Описание:</strong> {{ profile_user.enterprise_profile.description }}</p>
+      {% endif %}
+      {% if profile_user.enterprise_profile.website %}
+      <p><strong>Сайт:</strong> <a href="{{ profile_user.enterprise_profile.website }}" target="_blank">{{ profile_user.enterprise_profile.website }}</a></p>
+      {% endif %}
+      {% if profile_user.enterprise_profile.competencies %}
+      <p><strong>Компетенции:</strong> {{ profile_user.enterprise_profile.competencies | join(', ') }}</p>
+      {% endif %}
+      {% if profile_user.enterprise_profile.experience_years is not none %}
+      <p><strong>Опыт:</strong> {{ profile_user.enterprise_profile.experience_years }} лет</p>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <p><strong>Email:</strong> {{ profile_user.email }}</p>
+
+  {% if projects %}
+  <h3>Проекты стартапа</h3>
+  <div class="row">
+    {% for project in projects %}
+    <div class="col-md-4 mb-3">
+      <div class="card">
+        {% if project.image_url %}
+        <img src="{{ project.image_url }}" class="card-img-top" style="max-height:150px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ project.title }}</h5>
+          <p class="card-text">{{ project.description[:100] }}{% if project.description|length > 100 %}...{% endif %}</p>
+          <a href="/projects/{{ project.id }}/edit" class="btn btn-sm btn-outline-primary">Подробнее</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if requests %}
+  <h3>Открытые заявки</h3>
+  <div class="list-group">
+    {% for req in requests %}
+    <a href="/requests/{{ req.id }}" class="list-group-item list-group-item-action">
+      {{ req.title }}
+      <small class="text-muted">({{ req.tags | join(', ') if req.tags else 'без тегов' }})</small>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

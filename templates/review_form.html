@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Оценка проекта{% endblock %}
+{% block content %}
+<div class="container">
+  <h2>Оценка проекта: {{ project.title }}</h2>
+  <p>{{ project.description }}</p>
+  <hr>
+  <form method="post" action="/review/{{ token }}">
+    {% for criterion in criteria %}
+    <div class="mb-3">
+      <label for="score_{{ criterion.id }}" class="form-label">{{ criterion.name }} (макс. {{ criterion.max_score }})</label>
+      <p class="text-muted">{{ criterion.description }}</p>
+      <input type="number" class="form-control" id="score_{{ criterion.id }}" name="score_{{ criterion.id }}" min="0" max="{{ criterion.max_score }}" step="0.5" required>
+      <small class="text-muted">Вес критерия: {{ criterion.weight }}</small>
+    </div>
+    {% endfor %}
+    <div class="mb-3">
+      <label for="comment" class="form-label">Ваш комментарий (необязательно)</label>
+      <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить оценку</button>
+  </form>
+</div>
+{% endblock %}

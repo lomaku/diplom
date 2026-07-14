@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Редактировать проект{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Редактирование проекта</h2>
+    {% if project.image_url %}
+      <div class="mb-3">
+        <img src="{{ project.image_url }}" class="img-fluid rounded" style="max-height:200px;">
+      </div>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="title" class="form-label">Название *</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ project.title }}" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Описание</label>
+        <textarea class="form-control" id="description" name="description" rows="4">{{ project.description or '' }}</textarea>
+      </div>
+      <div class="mb-3">
+        <label for="stage" class="form-label">Стадия разработки</label>
+        <input type="text" class="form-control" id="stage" name="stage" value="{{ project.stage or '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Теги (через запятую)</label>
+        <input type="text" class="form-control" id="tags" name="tags" value="{{ project.tags | join(', ') if project.tags else '' }}">
+      </div>
+      <div class="mb-3">
+        <label for="status" class="form-label">Статус</label>
+        <select class="form-select" id="status" name="status">
+          <option value="draft" {% if project.status.value == 'draft' %}selected{% endif %}>Черновик</option>
+          <option value="submitted" {% if project.status.value == 'submitted' %}selected{% endif %}>Подана</option>
+          <option value="under_review" {% if project.status.value == 'under_review' %}selected{% endif %}>На рецензии</option>
+          <option value="evaluated" {% if project.status.value == 'evaluated' %}selected{% endif %}>Оценён</option>
+          <option value="archived" {% if project.status.value == 'archived' %}selected{% endif %}>В архиве</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="image" class="form-label">Изображение проекта</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+      </div>
+      <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+      <a href="/projects/my" class="btn btn-secondary">Отмена</a>
+    </form>
+  </div>
+</div>
+{% endblock %}

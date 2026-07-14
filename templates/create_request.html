@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Создать заявку{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Новая заявка на инновации</h2>
+    <form method="post" action="/requests/create">
+      <div class="mb-3">
+        <label for="title" class="form-label">Название заявки *</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Описание потребности</label>
+        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="requirements" class="form-label">Требования к решению</label>
+        <textarea class="form-control" id="requirements" name="requirements" rows="4"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="tags" class="form-label">Теги (через запятую)</label>
+        <input type="text" class="form-control" id="tags" name="tags" placeholder="например: AI, логистика, ритейл">
+        <small class="text-muted">Укажите ключевые технологии или отрасль.</small>
+      </div>
+      <button type="submit" class="btn btn-primary">Создать заявку</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

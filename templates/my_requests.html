@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Мои заявки{% endblock %}
+{% block content %}
+<h2>Мои заявки</h2>
+{% if requests %}
+  <div class="row">
+    {% for req in requests %}
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="/requests/{{ req.id }}" class="text-decoration-none">{{ req.title }}</a>
+          </h5>
+          <p class="card-text">{{ req.description[:150] }}{% if req.description|length > 150 %}...{% endif %}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Теги:</strong> {{ req.tags | join(', ') if req.tags else 'нет' }}</li>
+            <li class="list-group-item"><strong>Статус:</strong> <span class="badge bg-secondary">{{ req.status.value | status_rus }}</span></li>
+          </ul>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <small class="text-muted">Создана {{ req.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+          <a href="/requests/{{ req.id }}/edit" class="btn btn-sm btn-outline-primary">Редактировать</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>У вас ещё нет заявок. <a href="/requests/create">Создать первую</a></p>
+{% endif %}
+{% endblock %}

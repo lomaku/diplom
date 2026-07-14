@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Мои проекты{% endblock %}
+{% block content %}
+<h2>Мои проекты</h2>
+{% if projects %}
+  <div class="row">
+    {% for project in projects %}
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        {% if project.image_url %}
+        <img src="{{ project.image_url }}" class="card-img-top" style="max-height:200px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ project.title }}</h5>
+          <p class="card-text">{{ project.description[:150] }}{% if project.description|length > 150 %}...{% endif %}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Стадия:</strong> {{ project.stage or 'не указана' }}</li>
+            <li class="list-group-item"><strong>Теги:</strong> {{ project.tags | join(', ') if project.tags else 'нет' }}</li>
+            <li class="list-group-item"><strong>Статус:</strong> <span class="badge bg-secondary">{{ project.status.value | status_rus }}</span></li>
+          </ul>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <small class="text-muted">Создан {{ project.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+          <div>
+            <a href="/projects/{{ project.id }}/edit" class="btn btn-sm btn-outline-primary">Редактировать</a>
+            <form method="post" action="/projects/{{ project.id }}/delete" style="display:inline;" onsubmit="return confirmDelete('{{ project.title }}');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+            </form>
+            {% if project.status.value == 'draft' %}
+            <form method="post" action="/projects/{{ project.id }}/submit" style="display:inline;">
+              <button type="submit" class="btn btn-sm btn-outline-success">На рецензию</button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>У вас ещё нет проектов. <a href="/projects/create">Создать первый</a></p>
+{% endif %}
+
+<script>
+function confirmDelete(title) {
+  return confirm('Вы действительно хотите удалить проект «' + title + '»? Это действие нельзя отменить.');
+}
+</script>
+{% endblock %}

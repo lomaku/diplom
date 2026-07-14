@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Витрина проектов{% endblock %}
+{% block content %}
+<h2>Витрина проектов</h2>
+<form class="row g-3 mb-4" method="get" action="/projects">
+  <div class="col-md-3">
+    <input type="text" class="form-control" name="search" placeholder="Поиск по названию/описанию" value="{{ search }}">
+  </div>
+  <div class="col-md-2">
+    <input type="text" class="form-control" name="tag" placeholder="Тег" value="{{ current_tag }}">
+  </div>
+  <div class="col-md-2">
+    <input type="number" step="0.1" class="form-control" name="min_score" placeholder="Мин. балл" value="{{ min_score }}">
+  </div>
+  <div class="col-md-2">
+    <input type="number" step="0.1" class="form-control" name="max_score" placeholder="Макс. балл" value="{{ max_score }}">
+  </div>
+  <div class="col-md-3">
+    <button type="submit" class="btn btn-primary me-2">Искать</button>
+    <a href="/projects" class="btn btn-secondary">Сбросить</a>
+  </div>
+</form>iv>
+</form>
+
+{% if projects %}
+  <div class="row">
+    {% for project in projects %}
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        {% if project.image_url %}
+        <img src="{{ project.image_url }}" class="card-img-top" style="max-height:200px; object-fit: cover;">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="/projects/{{ project.id }}" class="text-decoration-none">{{ project.title }}</a>
+          </h5>
+          <p class="card-text">{{ project.description[:150] }}{% if project.description|length > 150 %}...{% endif %}</p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Стадия:</strong> {{ project.stage or 'не указана' }}</li>
+            <li class="list-group-item"><strong>Теги:</strong> {{ project.tags | join(', ') if project.tags else 'нет' }}</li>
+            <li class="list-group-item">
+              <strong>Рейтинг:</strong> 
+              {% if project.overall_score is not none %}
+                <span class="badge bg-success">{{ project.overall_score }}</span>
+              {% else %}
+                <span class="text-muted">нет</span>
+              {% endif %}
+            </li>
+            <li class="list-group-item"><strong>Стартап:</strong> <a href="/user/{{ project.startup.id }}">{{ project.startup.name }}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>Нет проектов, прошедших рецензию.</p>
+{% endif %}
+{% endblock %}
